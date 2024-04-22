@@ -32,6 +32,7 @@ namespace fileio
 
 		std::array<scr_fh_t, max_fhs> scr_fhs = {};
 
+
 		bool validate_scr_path(const std::string& fpath)
 		{
 			if (fpath.empty())
@@ -195,6 +196,9 @@ namespace fileio
 					{
 						auto fd = 0;
 						auto file_length = game::FS_FOpenFileRead(fpath.c_str(), &fd);
+
+						printf("FD %d", fd);
+						printf("FILE LENGHT %d", file_length);
 
 						if (!fd || file_length < 0)
 						{
@@ -417,6 +421,63 @@ namespace fileio
 					}
 
 					game::FS_FreeFileList(files);
+				});
+
+			gsc::function::add("writefile", []()
+				{
+					const auto path = game::Scr_GetString(0, game::SCRIPTINSTANCE_SERVER);
+					const auto data = game::Scr_GetString(1, game::SCRIPTINSTANCE_SERVER);
+
+					auto append = false;
+					if (game::Scr_GetNumParam(game::SCRIPTINSTANCE_SERVER) > 2)
+					{
+						append = game::Scr_GetInt(game::SCRIPTINSTANCE_SERVER, 2);
+					}
+
+					game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, utils::io::write_file(path, data, append));
+				});
+
+			gsc::function::add("readfile", []()
+				{
+					const auto path = game::Scr_GetString(0, game::SCRIPTINSTANCE_SERVER);
+					game::Scr_AddString(game::SCRIPTINSTANCE_SERVER, utils::io::read_file(path).c_str());
+				});
+
+			gsc::function::add("fileexists", []()
+				{
+					const auto path = game::Scr_GetString(0, game::SCRIPTINSTANCE_SERVER);
+					
+					if (!utils::io::file_exists(path))
+					{
+						game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 0);
+						return;
+					}
+
+					game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 1);
+				});
+			
+			gsc::function::add("createdirectory", []()
+				{
+					const auto path = game::Scr_GetString(0, game::SCRIPTINSTANCE_SERVER);
+					if (!utils::io::create_directory(path))
+					{
+						game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 0);
+						return;
+					}
+
+					game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 1);
+				});
+
+			gsc::function::add("directoryexists", []()
+				{
+					const auto path = game::Scr_GetString(0, game::SCRIPTINSTANCE_SERVER);
+					if(!utils::io::directory_exists(path))
+					{
+						game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 0);
+						return;
+					}
+
+					game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 1);
 				});
 		}
 	}
