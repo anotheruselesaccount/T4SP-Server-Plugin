@@ -197,9 +197,6 @@ namespace fileio
 						auto fd = 0;
 						auto file_length = game::FS_FOpenFileRead(fpath.c_str(), &fd);
 
-						printf("FD %d", fd);
-						printf("FILE LENGHT %d", file_length);
-
 						if (!fd || file_length < 0)
 						{
 							game::Com_PrintWarning(game::CON_CHANNEL_SCRIPT, "Failed to open file for reading: %s\n", fpath.c_str());
