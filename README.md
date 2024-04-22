@@ -9,8 +9,24 @@ Detours and reimplements the entire GSC VM + compiler.
 
 Adds custom GSC functions.
 
-## FileIO
-This plugin provides FileIO interface to GSC for reading and writing files, this is exact to [CoD4x's](https://github.com/callofduty4x/CoD4x_Server/blob/master/scriptdocumentation/script_functions_reference.md#file-operations) interface.
+# FileIO
+This plugin provides FileIO interface to GSC for reading and writing files.
+
+## T6 gsc utils io functions
+
+* ```fileExists(path)```: Returns true if the file exists.
+
+* ```writeFile(path, data[, append])```: Creates a file if it doesn't exist and writes/appends text to it.
+
+* ```readFile(path)```: Reads a file.
+
+* ```createDirectory(path)```: Creates a directory and returns false if failed creating directories.
+
+* ```directoryExists(path)```: Returns true if the directory exists.
+
+## CoD4x io function
+
+This is exact to [CoD4x's](https://github.com/callofduty4x/CoD4x_Server/blob/master/scriptdocumentation/script_functions_reference.md#file-operations) interface.
 
 However, all reads and writes will take place strictly and only in the `scriptdata` folder, no up directory traversal allowed.
 
